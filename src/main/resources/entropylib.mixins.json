@@ -1,0 +1,31 @@
+{
+  "required": true,
+  "package": "dev.entropy159.entropylib.mixin",
+  "compatibilityLevel": "JAVA_21",
+  "mixins": [
+    "BlockItemMixin",
+    "ConfigValueMixin",
+    "EntityMixin",
+    "ItemEntityMixin",
+    "LivingEntityMixin",
+    "ignoreAdventureMode.CommonHooksMixin",
+    "ignoreAdventureMode.ItemStackMixin",
+    "ignoreAdventureMode.PlayerMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  },
+  "overwrites": {
+    "requireAnnotations": true
+  },
+  "client": [
+    "ClientEntityMixin",
+    "ClientLevelMixin",
+    "ClientPacketListenerMixin",
+    "LevelRendererMixin",
+    "ignoreAdventureMode.ShowOutlineMixin"
+  ],
+  "mixinextras": {
+    "minVersion": "0.5.3"
+  }
+}
