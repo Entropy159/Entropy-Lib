@@ -106,6 +106,7 @@ tasks.withType(ProcessResources).configureEach {
 }
 
 publishing {
+    def gitCommit = "git rev-parse --short HEAD".execute([], project.rootDir).text.trim()
     repositories {
         maven {
             name = "GitHubPackages"
@@ -118,6 +119,10 @@ publishing {
     }
     publications {
         mavenJava(MavenPublication) {
+            groupId = "dev.entropy159"
+            artifactId = project.modid
+            version = "${project.version}-${gitCommit}"
+
             from components.java
         }
     }
