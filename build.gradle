@@ -106,7 +106,7 @@ tasks.withType(ProcessResources).configureEach {
 }
 
 publishing {
-    def gitCommit = "git rev-parse --short HEAD".execute([], project.rootDir).text.trim()
+    def gitCommitCount = "git rev-list --count HEAD".execute([], project.rootDir).text.trim()
     repositories {
         maven {
             name = "GitHubPackages"
@@ -121,7 +121,7 @@ publishing {
         mavenJava(MavenPublication) {
             groupId = "dev.entropy159"
             artifactId = project.mod_id
-            version = "${project.mod_version}-${gitCommit}"
+            version = "${project.mod_version}-${gitCommitCount}"
 
             from components.java
         }
