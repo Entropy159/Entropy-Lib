@@ -120,8 +120,8 @@ publishing {
     publications {
         mavenJava(MavenPublication) {
             groupId = "dev.entropy159"
-            artifactId = project.modid
-            version = "${project.version}-${gitCommit}"
+            artifactId = project.mod_id
+            version = "${project.mod_version}-${gitCommit}"
 
             from components.java
         }
