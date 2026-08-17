@@ -106,14 +106,19 @@ tasks.withType(ProcessResources).configureEach {
 }
 
 publishing {
-    publications {
-        register('mavenJava', MavenPublication) {
-            from components.java
-        }
-    }
     repositories {
         maven {
-            url "file://${project.projectDir}/repo"
+            name = "GitHubPackages"
+            url = uri("https://maven.pkg.github.com/entropy159/Entropy-Lib")
+            credentials {
+                username = System.getenv("GITHUB_ACTOR")
+                password = System.getenv("GITHUB_TOKEN")
+            }
+        }
+    }
+    publications {
+        gpr('mavenJava', MavenPublication) {
+            from(components.java)
         }
     }
 }
