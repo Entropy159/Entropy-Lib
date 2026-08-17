@@ -116,6 +116,11 @@ publishing {
             }
         }
     }
+    publications {
+        mavenJava(MavenPublication) {
+            from components.java
+        }
+    }
 }
 
 tasks.withType(JavaCompile).configureEach {
