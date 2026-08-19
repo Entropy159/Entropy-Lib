@@ -1,9 +1,11 @@
 package dev.entropy159.entropylib;
 
 import com.mojang.logging.LogUtils;
+import dev.entropy159.entropylib.commands.InfiniteCommand;
 import dev.entropy159.entropylib.commands.UnbreakableCommand;
 import dev.entropy159.entropylib.config.ClientConfig;
 import dev.entropy159.entropylib.mixininterfaces.ConfigValueAddon;
+import dev.entropy159.entropylib.registry.EntropyComponents;
 import net.minecraft.resources.ResourceLocation;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.bus.api.SubscribeEvent;
@@ -27,6 +29,8 @@ public class EntropyLib {
         NeoForge.EVENT_BUS.register(this);
         bus.addListener(this::setupConfigs);
 
+        EntropyComponents.init(bus);
+
         container.registerConfig(ModConfig.Type.CLIENT, ClientConfig.SPEC);
     }
 
@@ -38,6 +42,7 @@ public class EntropyLib {
     public void registerCommands(RegisterCommandsEvent event) {
         var dispatcher = event.getDispatcher();
         UnbreakableCommand.register(dispatcher);
+        InfiniteCommand.register(dispatcher);
     }
 
     public void setupConfigs(FMLLoadCompleteEvent event) {

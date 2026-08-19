@@ -1,4 +1,6 @@
 {
   "message.entropylib.added_unbreakable": "Item is now unbreakable!",
-  "message.entropylib.removed_unbreakable": "Item is now breakable!"
+  "message.entropylib.removed_unbreakable": "Item is now breakable!",
+  "message.entropylib.added_infinite": "Item is now infinite!",
+  "message.entropylib.removed_infinite": "Item is no longer infinite!"
 }

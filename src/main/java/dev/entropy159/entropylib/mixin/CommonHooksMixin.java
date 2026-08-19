@@ -1,4 +1,4 @@
-package dev.entropy159.entropylib.mixin.ignoreAdventureMode;
+package dev.entropy159.entropylib.mixin;
 
 import com.llamalad7.mixinextras.expression.Definition;
 import com.llamalad7.mixinextras.expression.Expression;

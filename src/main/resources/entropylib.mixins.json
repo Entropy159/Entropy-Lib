@@ -8,9 +8,9 @@
     "EntityMixin",
     "ItemEntityMixin",
     "LivingEntityMixin",
-    "ignoreAdventureMode.CommonHooksMixin",
-    "ignoreAdventureMode.ItemStackMixin",
-    "ignoreAdventureMode.PlayerMixin"
+    "CommonHooksMixin",
+    "ItemStackMixin",
+    "PlayerMixin"
   ],
   "injectors": {
     "defaultRequire": 1
@@ -23,7 +23,7 @@
     "ClientLevelMixin",
     "ClientPacketListenerMixin",
     "LevelRendererMixin",
-    "ignoreAdventureMode.ShowOutlineMixin"
+    "ShowOutlineMixin"
   ],
   "mixinextras": {
     "minVersion": "0.5.3"
