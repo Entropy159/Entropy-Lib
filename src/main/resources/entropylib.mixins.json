@@ -10,7 +10,9 @@
     "ItemEntityMixin",
     "ItemStackMixin",
     "LivingEntityMixin",
-    "PlayerMixin"
+    "PlayerMixin",
+    "infinite.InfiniteArrowMixin",
+    "infinite.InfinitePotionMixin"
   ],
   "injectors": {
     "defaultRequire": 1
