@@ -4,13 +4,15 @@
   "compatibilityLevel": "JAVA_21",
   "mixins": [
     "BlockItemMixin",
+    "CommonHooksMixin",
     "ConfigValueMixin",
     "EntityMixin",
     "ItemEntityMixin",
-    "LivingEntityMixin",
-    "CommonHooksMixin",
     "ItemStackMixin",
-    "PlayerMixin"
+    "LivingEntityMixin",
+    "PlayerMixin",
+    "infinite.InfiniteArrowsMixin",
+    "infinite.InfinitePotionsMixin"
   ],
   "injectors": {
     "defaultRequire": 1

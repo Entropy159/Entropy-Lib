@@ -4,6 +4,8 @@ import com.llamalad7.mixinextras.injector.ModifyReturnValue;
 import com.llamalad7.mixinextras.sugar.Local;
 import dev.entropy159.entropylib.events.IgnoreAdventureModeEvent;
 import dev.entropy159.entropylib.registry.EntropyComponents;
+import net.minecraft.core.component.DataComponentHolder;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.state.pattern.BlockInWorld;
@@ -14,7 +16,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
 
 @Mixin(ItemStack.class)
-public abstract class ItemStackMixin {
+public abstract class ItemStackMixin implements DataComponentHolder {
     @Shadow
     public abstract Item getItem();
 
@@ -30,10 +32,8 @@ public abstract class ItemStackMixin {
         return original || event.shouldBypass();
     }
 
-    @Redirect(method = "shrink", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/item/ItemStack;grow(I)V"))
-    private void infinite(ItemStack instance, int decrement) {
-        if (!instance.getOrDefault(EntropyComponents.INFINITE, false)) {
-            instance.grow(decrement);
-        }
+    @Redirect(method = "consume", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/LivingEntity;hasInfiniteMaterials()Z"))
+    private boolean infinite(LivingEntity instance) {
+        return instance.hasInfiniteMaterials() || getOrDefault(EntropyComponents.INFINITE, false);
     }
 }
