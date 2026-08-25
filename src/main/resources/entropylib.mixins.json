@@ -12,7 +12,8 @@
     "LivingEntityMixin",
     "PlayerMixin",
     "infinite.InfiniteArrowMixin",
-    "infinite.InfinitePotionMixin"
+    "infinite.InfinitePotionMixin",
+    "infinite.InfiniteSpawnEggMixin"
   ],
   "injectors": {
     "defaultRequire": 1
