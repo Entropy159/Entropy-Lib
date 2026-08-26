@@ -21,6 +21,8 @@ public class EntropyEvents {
 
     @SubscribeEvent
     public static void onDeath(LivingDeathEvent event) {
-        PacketDistributor.sendToAllPlayers(new ClearInvisPacket(event.getEntity().getId()));
+        if (!event.getEntity().level().isClientSide()) {
+            PacketDistributor.sendToAllPlayers(new ClearInvisPacket(event.getEntity().getId()));
+        }
     }
 }
