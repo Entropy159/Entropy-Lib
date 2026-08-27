@@ -25,7 +25,7 @@ public class EntropyLibClient {
 
     @SubscribeEvent
     static void onRenderPlayer(RenderPlayerEvent.Pre event) {
-        if (event.getEntity().getActiveEffects().stream().anyMatch(effect -> effect instanceof InvisEffect invis && invis.isFull())) {
+        if (event.getEntity().getActiveEffects().stream().anyMatch(effect -> effect.getEffect().value() instanceof InvisEffect invis && invis.isFull())) {
             event.setCanceled(true);
         }
     }
