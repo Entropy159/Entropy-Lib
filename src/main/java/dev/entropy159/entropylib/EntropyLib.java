@@ -4,6 +4,7 @@ import com.mojang.logging.LogUtils;
 import dev.entropy159.entropylib.commands.InfiniteCommand;
 import dev.entropy159.entropylib.commands.UnbreakableCommand;
 import dev.entropy159.entropylib.config.ClientConfig;
+import dev.entropy159.entropylib.config.ServerConfig;
 import dev.entropy159.entropylib.mixininterfaces.ConfigValueAddon;
 import dev.entropy159.entropylib.registry.EntropyComponents;
 import net.minecraft.resources.ResourceLocation;
@@ -32,6 +33,7 @@ public class EntropyLib {
         EntropyComponents.init(bus);
 
         container.registerConfig(ModConfig.Type.CLIENT, ClientConfig.SPEC);
+        container.registerConfig(ModConfig.Type.SERVER, ServerConfig.SPEC);
     }
 
     public static ResourceLocation id(String path) {

@@ -1,7 +1,7 @@
 package dev.entropy159.entropylib.client;
 
 import dev.entropy159.entropylib.EntropyLib;
-import net.minecraft.resources.ResourceLocation;
+import dev.entropy159.entropylib.util.InvisEffect;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
@@ -17,7 +17,6 @@ import java.util.HashMap;
 @Mod(value = EntropyLib.MODID, dist = Dist.CLIENT)
 @EventBusSubscriber(modid = EntropyLib.MODID, value = Dist.CLIENT)
 public class EntropyLibClient {
-    public static HashMap<Integer, HashMap<ResourceLocation, Boolean>> INVIS_MAP = new HashMap<>();
     public static HashMap<Integer, Vec3> UNLERP_ENTITIES = new HashMap<>();
 
     public EntropyLibClient(ModContainer container) {
@@ -26,7 +25,7 @@ public class EntropyLibClient {
 
     @SubscribeEvent
     static void onRenderPlayer(RenderPlayerEvent.Pre event) {
-        if (INVIS_MAP.getOrDefault(event.getEntity().getId(), new HashMap<>()).values().stream().anyMatch(b -> b)) {
+        if (event.getEntity().getActiveEffects().stream().anyMatch(effect -> effect instanceof InvisEffect invis && invis.isFull())) {
             event.setCanceled(true);
         }
     }

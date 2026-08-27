@@ -6,6 +6,7 @@
     "BlockItemMixin",
     "CommonHooksMixin",
     "ConfigValueMixin",
+    "EnchantCommandMixin",
     "EntityMixin",
     "ItemEntityMixin",
     "ItemStackMixin",
@@ -22,7 +23,6 @@
     "requireAnnotations": true
   },
   "client": [
-    "ClientEntityMixin",
     "ClientLevelMixin",
     "ClientPacketListenerMixin",
     "LevelRendererMixin",
