@@ -16,6 +16,7 @@ import org.jetbrains.annotations.Nullable;
 import org.joml.Matrix4f;
 import org.joml.Matrix4fStack;
 
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -59,6 +60,7 @@ public class FBOManager {
         private int height;
         private final @Nullable Supplier<ShaderInstance> shader;
         private final Supplier<VertexFormat> format;
+        private Color color = Color.WHITE;
 
         public FBO(ResourceLocation id, @Nullable Supplier<ShaderInstance> shader, Supplier<VertexFormat> format, int width, int height) {
             this.id = id;
@@ -75,20 +77,6 @@ public class FBOManager {
             TARGETS.put(this, target);
 
             Minecraft.getInstance().getTextureManager().register(id, new RenderTargetTexture(this));
-        }
-
-        public ResourceLocation getLocation() {
-            return id;
-        }
-
-        public void resize(int width, int height) {
-            this.width = width;
-            this.height = height;
-            Optional.ofNullable(getTarget()).ifPresent(target -> target.resize(width, height, Minecraft.ON_OSX));
-        }
-
-        public RenderTarget getTarget() {
-            return TARGETS.get(this);
         }
 
         public void render(float partialTick) {
@@ -129,10 +117,14 @@ public class FBOManager {
 
             Tesselator tesselator = Tesselator.getInstance();
             BufferBuilder builder = tesselator.begin(VertexFormat.Mode.QUADS, format.get());
-            builder.addVertex(-1, -1, 0).setColor(1f, 1f, 1f, 1f).setUv(0, 0).setNormal(0, 0, 1).setLight(LightTexture.FULL_BRIGHT).setOverlay(OverlayTexture.NO_OVERLAY);
-            builder.addVertex(1, -1, 0).setColor(1f, 1f, 1f, 1f).setUv(1, 0).setNormal(0, 0, 1).setLight(LightTexture.FULL_BRIGHT).setOverlay(OverlayTexture.NO_OVERLAY);
-            builder.addVertex(1, 1, 0).setColor(1f, 1f, 1f, 1f).setUv(1, 1).setNormal(0, 0, 1).setLight(LightTexture.FULL_BRIGHT).setOverlay(OverlayTexture.NO_OVERLAY);
-            builder.addVertex(-1, 1, 0).setColor(1f, 1f, 1f, 1f).setUv(0, 1).setNormal(0, 0, 1).setLight(LightTexture.FULL_BRIGHT).setOverlay(OverlayTexture.NO_OVERLAY);
+            float red = color.getRed() / 255f;
+            float green = color.getGreen() / 255f;
+            float blue = color.getBlue() / 255f;
+            float alpha = color.getAlpha() / 255f;
+            builder.addVertex(-1, -1, 0).setColor(red, green, blue, alpha).setUv(0, 0).setNormal(0, 0, 1).setLight(LightTexture.FULL_BRIGHT).setOverlay(OverlayTexture.NO_OVERLAY);
+            builder.addVertex(1, -1, 0).setColor(red, green, blue, alpha).setUv(1, 0).setNormal(0, 0, 1).setLight(LightTexture.FULL_BRIGHT).setOverlay(OverlayTexture.NO_OVERLAY);
+            builder.addVertex(1, 1, 0).setColor(red, green, blue, alpha).setUv(1, 1).setNormal(0, 0, 1).setLight(LightTexture.FULL_BRIGHT).setOverlay(OverlayTexture.NO_OVERLAY);
+            builder.addVertex(-1, 1, 0).setColor(red, green, blue, alpha).setUv(0, 1).setNormal(0, 0, 1).setLight(LightTexture.FULL_BRIGHT).setOverlay(OverlayTexture.NO_OVERLAY);
             MeshData meshData = builder.buildOrThrow();
             BufferUploader.drawWithShader(meshData);
 
@@ -147,6 +139,40 @@ public class FBOManager {
             var mainTarget = Minecraft.getInstance().getMainRenderTarget();
             mainTarget.bindWrite(true);
             RenderSystem.viewport(0, 0, mainTarget.width, mainTarget.height);
+        }
+
+        public RenderTarget getTarget() {
+            return TARGETS.get(this);
+        }
+
+        public ResourceLocation getLocation() {
+            return id;
+        }
+
+        public void resize(int width, int height) {
+            this.width = width;
+            this.height = height;
+            Optional.ofNullable(getTarget()).ifPresent(target -> target.resize(width, height, Minecraft.ON_OSX));
+        }
+
+        public Color getColor() {
+            return color;
+        }
+
+        public void setColor(int color) {
+            setColor(new Color(color));
+        }
+
+        public void setColor(int red, int green, int blue, int alpha) {
+            setColor(new Color(red, green, blue, alpha));
+        }
+
+        public void setColor(float red, float green, float blue, float alpha) {
+            setColor(new Color(red, green, blue, alpha));
+        }
+
+        public void setColor(Color color) {
+            this.color = color;
         }
     }
 
