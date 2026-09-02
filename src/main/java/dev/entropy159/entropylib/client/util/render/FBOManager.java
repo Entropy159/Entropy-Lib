@@ -21,6 +21,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Consumer;
 import java.util.function.Supplier;
 
 public class FBOManager {
@@ -61,6 +62,12 @@ public class FBOManager {
         private final @Nullable Supplier<ShaderInstance> shader;
         private final Supplier<VertexFormat> format;
         private Color color = Color.WHITE;
+        private Runnable beforeRender = () -> {
+        };
+        private Consumer<ShaderInstance> uniforms = shader -> {
+        };
+        private Runnable afterRender = () -> {
+        };
 
         public FBO(ResourceLocation id, @Nullable Supplier<ShaderInstance> shader, Supplier<VertexFormat> format, int width, int height) {
             this.id = id;
@@ -80,6 +87,7 @@ public class FBOManager {
         }
 
         public void render(float partialTick) {
+            beforeRender.run();
             var target = getTarget();
             if (target == null) {
                 init();
@@ -113,6 +121,7 @@ public class FBOManager {
                         uniform.set(timeInSeconds);
                     }
                 }
+                uniforms.accept(shader.get());
             }
 
             Tesselator tesselator = Tesselator.getInstance();
@@ -139,6 +148,7 @@ public class FBOManager {
             var mainTarget = Minecraft.getInstance().getMainRenderTarget();
             mainTarget.bindWrite(true);
             RenderSystem.viewport(0, 0, mainTarget.width, mainTarget.height);
+            afterRender.run();
         }
 
         public RenderTarget getTarget() {
@@ -152,7 +162,6 @@ public class FBOManager {
         public void resize(int width, int height) {
             this.width = width;
             this.height = height;
-            Optional.ofNullable(getTarget()).ifPresent(target -> target.resize(width, height, Minecraft.ON_OSX));
         }
 
         public Color getColor() {
@@ -173,6 +182,18 @@ public class FBOManager {
 
         public void setColor(Color color) {
             this.color = color;
+        }
+
+        public void setBeforeRender(Runnable beforeRender) {
+            this.beforeRender = beforeRender;
+        }
+
+        public void setUniforms(Consumer<ShaderInstance> uniforms) {
+            this.uniforms = uniforms;
+        }
+
+        public void setAfterRender(Runnable afterRender) {
+            this.afterRender = afterRender;
         }
     }
 
