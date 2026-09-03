@@ -62,6 +62,8 @@ public class FBOManager {
         private final @Nullable Supplier<ShaderInstance> shader;
         private final Supplier<VertexFormat> format;
         private Color color = Color.WHITE;
+        private Color clearColor = new Color(0x00000000);
+        private boolean setClearColor = false;
         private Runnable beforeRender = () -> {
         };
         private Consumer<ShaderInstance> uniforms = shader -> {
@@ -80,7 +82,7 @@ public class FBOManager {
         public void init() {
             Optional.ofNullable(getTarget()).ifPresent(RenderTarget::destroyBuffers);
             var target = new TextureTarget(width, height, true, Minecraft.ON_OSX);
-            target.setClearColor(0, 0, 0, 0);
+            setClearColor(target);
             TARGETS.put(this, target);
 
             Minecraft.getInstance().getTextureManager().register(id, new RenderTargetTexture(this));
@@ -95,6 +97,10 @@ public class FBOManager {
             }
             if (target.width != width || target.height != height) {
                 target.resize(width, height, Minecraft.ON_OSX);
+            }
+            if (setClearColor) {
+                setClearColor(target);
+                setClearColor = false;
             }
 
             RenderSystem.viewport(0, 0, target.width, target.height);
@@ -182,6 +188,35 @@ public class FBOManager {
 
         public void setColor(Color color) {
             this.color = color;
+        }
+
+        public Color getClearColor() {
+            return clearColor;
+        }
+
+        public void setClearColor(int color) {
+            setClearColor(new Color(color));
+        }
+
+        public void setClearColor(int red, int green, int blue, int alpha) {
+            setClearColor(new Color(red, green, blue, alpha));
+        }
+
+        public void setClearColor(float red, float green, float blue, float alpha) {
+            setClearColor(new Color(red, green, blue, alpha));
+        }
+
+        public void setClearColor(Color color) {
+            setClearColor = true;
+            clearColor = color;
+        }
+
+        private void setClearColor(RenderTarget target) {
+            float red = clearColor.getRed() / 255f;
+            float green = clearColor.getGreen() / 255f;
+            float blue = clearColor.getBlue() / 255f;
+            float alpha = clearColor.getAlpha() / 255f;
+            target.setClearColor(red, green, blue, alpha);
         }
 
         public void setBeforeRender(Runnable beforeRender) {
