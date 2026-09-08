@@ -3,6 +3,7 @@ package dev.entropy159.entropylib.util;
 import dev.entropy159.entropylib.EntropyLib;
 import dev.entropy159.entropylib.network.toClient.InstantTeleportPacket;
 import net.minecraft.ChatFormatting;
+import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.GlobalPos;
 import net.minecraft.core.Holder;
@@ -10,6 +11,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.network.protocol.game.ClientboundSoundPacket;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
@@ -22,7 +24,11 @@ import net.minecraft.world.level.GameRules;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.Vec3;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
 import net.neoforged.neoforge.network.PacketDistributor;
+import net.neoforged.neoforge.network.registration.NetworkRegistry;
+import net.neoforged.neoforge.server.ServerLifecycleHooks;
 
 import javax.annotation.Nullable;
 import java.awt.*;
@@ -144,5 +150,26 @@ public class Utils {
 
     public static void playSoundForPlayer(ServerPlayer player, SoundEvent event, SoundSource source) {
         player.connection.send(new ClientboundSoundPacket(Holder.direct(SoundEvent.createFixedRangeEvent(event.getLocation(), 16)), source, player.getEyePosition().x, player.getEyePosition().y, player.getEyePosition().z, 1, 1, player.serverLevel().getRandom().nextLong()));
+    }
+
+    @OnlyIn(Dist.CLIENT)
+    public static void optionalSendToServer(CustomPacketPayload packet, CustomPacketPayload... packets) {
+        if (NetworkRegistry.hasChannel(Objects.requireNonNull(Minecraft.getInstance().getConnection(), "Cannot send serverbound payloads on the server"), packet.type().id())) {
+            PacketDistributor.sendToServer(packet, packets);
+        }
+    }
+
+    public static void optionalSendToPlayer(ServerPlayer player, CustomPacketPayload packet, CustomPacketPayload... packets) {
+        if (NetworkRegistry.hasChannel(player.connection, packet.type().id())) {
+            PacketDistributor.sendToPlayer(player, packet, packets);
+        }
+    }
+
+    public static void optionalSendToPlayersInDimension(ServerLevel level, CustomPacketPayload packet, CustomPacketPayload... packets) {
+        level.players().forEach(player -> optionalSendToPlayer(player, packet, packets));
+    }
+
+    public static void optionalSendToAllPlayers(CustomPacketPayload packet, CustomPacketPayload... packets) {
+        Objects.requireNonNull(ServerLifecycleHooks.getCurrentServer(), "Cannot send clientbound payloads on the client").getPlayerList().getPlayers().forEach(player -> optionalSendToPlayer(player, packet, packets));
     }
 }
