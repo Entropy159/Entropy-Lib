@@ -52,7 +52,7 @@ config="${mod_id}.mixins.json"
     side="BOTH"
 
 [[dependencies.${mod_id}]]
-modId="ldlib"
+modId="ldlib2"
 type="required"
 versionRange="[${ldlib_version},)"
 ordering="NONE"
