@@ -1,8 +1,10 @@
 package dev.entropy159.entropylib.client;
 
+import com.lowdragmc.lowdraglib2.gui.holder.ModularUIContainerScreen;
 import dev.entropy159.entropylib.EntropyLib;
 import dev.entropy159.entropylib.client.util.render.FBOManager;
 import dev.entropy159.entropylib.client.util.render.RenderTypeUtil;
+import dev.entropy159.entropylib.ui.CustomPlayerUIMenuType;
 import dev.entropy159.entropylib.util.InvisEffect;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.api.distmarker.Dist;
@@ -11,6 +13,7 @@ import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.event.lifecycle.FMLLoadCompleteEvent;
+import net.neoforged.neoforge.client.event.RegisterMenuScreensEvent;
 import net.neoforged.neoforge.client.event.RegisterShadersEvent;
 import net.neoforged.neoforge.client.event.RenderLevelStageEvent;
 import net.neoforged.neoforge.client.event.RenderPlayerEvent;
@@ -50,5 +53,10 @@ public class EntropyLibClient {
         if (event.getStage() == RenderLevelStageEvent.Stage.AFTER_SKY) {
             FBOManager.renderAll(event.getPartialTick().getGameTimeDeltaPartialTick(true));
         }
+    }
+
+    @SubscribeEvent
+    static void screenRegistry(RegisterMenuScreensEvent event) {
+        event.register(CustomPlayerUIMenuType.MENU_TYPE.get(), ModularUIContainerScreen::new);
     }
 }
