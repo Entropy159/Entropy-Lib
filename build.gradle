@@ -21,8 +21,6 @@ sourceSets.main.resources {
 repositories {
     maven { url = "https://maven.ithundxr.dev/snapshots" } //Registrate
 
-    maven { url = "https://maven.firstdark.dev/snapshots" } //LDLib
-
     exclusiveContent {
         forRepository {
             maven {
@@ -86,7 +84,6 @@ dependencies {
     implementation "net.neoforged:neoforge:${neo_version}"
 
     implementation jarJar(group: 'com.tterrag.registrate', name: 'Registrate', version: "[${registrate_version},)")
-    implementation "com.lowdragmc.ldlib2:ldlib2-neoforge-${minecraft_version}:${ldlib_version}:all"
 }
 
 tasks.withType(ProcessResources).configureEach {
@@ -99,7 +96,6 @@ tasks.withType(ProcessResources).configureEach {
             mod_name               : mod_name,
             mod_license            : mod_license,
             mod_version            : mod_version,
-            ldlib_version          : ldlib_version,
     ]
     inputs.properties replaceProperties
 

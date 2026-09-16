@@ -7,7 +7,6 @@ import dev.entropy159.entropylib.config.ClientConfig;
 import dev.entropy159.entropylib.config.ServerConfig;
 import dev.entropy159.entropylib.mixininterfaces.ConfigValueAddon;
 import dev.entropy159.entropylib.registry.EntropyComponents;
-import dev.entropy159.entropylib.ui.CustomPlayerUIMenuType;
 import net.minecraft.resources.ResourceLocation;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.bus.api.SubscribeEvent;
@@ -32,7 +31,6 @@ public class EntropyLib {
         bus.addListener(this::setupConfigs);
 
         EntropyComponents.init(bus);
-        CustomPlayerUIMenuType.registerMenuTypes(bus);
 
         container.registerConfig(ModConfig.Type.CLIENT, ClientConfig.SPEC);
         container.registerConfig(ModConfig.Type.SERVER, ServerConfig.SPEC);
