@@ -20,6 +20,7 @@ import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.projectile.ProjectileUtil;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.GameRules;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.EntityHitResult;
@@ -150,6 +151,18 @@ public class Utils {
 
     public static void playSoundForPlayer(ServerPlayer player, SoundEvent event, SoundSource source) {
         player.connection.send(new ClientboundSoundPacket(Holder.direct(SoundEvent.createFixedRangeEvent(event.getLocation(), 16)), source, player.getEyePosition().x, player.getEyePosition().y, player.getEyePosition().z, 1, 1, player.serverLevel().getRandom().nextLong()));
+    }
+
+    public static boolean giveItemInvFirst(ServerPlayer player, ItemStack stack) {
+        int offset = 9;
+        int size = player.getInventory().getContainerSize();
+        for (int i = 0; i < size; i++) {
+            int slot = (i + offset) % size;
+            if (player.getInventory().getItem(slot).isEmpty() && player.getInventory().add(slot, stack)) {
+                return true;
+            }
+        }
+        return player.addItem(stack);
     }
 
     @OnlyIn(Dist.CLIENT)
