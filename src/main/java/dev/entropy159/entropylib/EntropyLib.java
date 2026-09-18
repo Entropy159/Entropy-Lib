@@ -6,7 +6,9 @@ import dev.entropy159.entropylib.commands.UnbreakableCommand;
 import dev.entropy159.entropylib.config.ClientConfig;
 import dev.entropy159.entropylib.config.ServerConfig;
 import dev.entropy159.entropylib.mixininterfaces.ConfigValueAddon;
+import dev.entropy159.entropylib.registrate.EntropyRegistrate;
 import dev.entropy159.entropylib.registry.EntropyComponents;
+import dev.entropy159.entropylib.registry.EntropyMenus;
 import net.minecraft.resources.ResourceLocation;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.bus.api.SubscribeEvent;
@@ -25,12 +27,14 @@ import org.slf4j.Logger;
 public class EntropyLib {
     public static final String MODID = "entropylib";
     public static final Logger LOGGER = LogUtils.getLogger();
+    public static final EntropyRegistrate REGISTRATE = EntropyRegistrate.create(MODID);
 
     public EntropyLib(IEventBus bus, ModContainer container) {
         NeoForge.EVENT_BUS.register(this);
         bus.addListener(this::setupConfigs);
 
         EntropyComponents.init(bus);
+        EntropyMenus.init();
 
         container.registerConfig(ModConfig.Type.CLIENT, ClientConfig.SPEC);
         container.registerConfig(ModConfig.Type.SERVER, ServerConfig.SPEC);
