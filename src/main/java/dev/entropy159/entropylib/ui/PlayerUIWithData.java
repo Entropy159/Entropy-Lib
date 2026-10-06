@@ -2,6 +2,7 @@ package dev.entropy159.entropylib.ui;
 
 import com.lowdragmc.lowdraglib2.gui.factory.IContainerUIHolder;
 import com.lowdragmc.lowdraglib2.gui.holder.ModularUIContainerMenu;
+import dev.entropy159.entropylib.EntropyLib;
 import dev.entropy159.entropylib.registry.EntropyMenus;
 import io.netty.buffer.Unpooled;
 import net.minecraft.MethodsReturnNonnullByDefault;
@@ -46,12 +47,18 @@ public class PlayerUIWithData {
      * or the holder instance could not be created
      */
     public static boolean openUI(Player player, ResourceLocation id, Consumer<RegistryFriendlyByteBuf> customData) {
-        if (!UI_HOLDERS.containsKey(id)) return false;
+        if (!UI_HOLDERS.containsKey(id)) {
+            EntropyLib.LOGGER.warn("Tried to open nonexistent UI {}", id);
+            return false;
+        }
         var tempBuf = new RegistryFriendlyByteBuf(Unpooled.buffer(), player.level().registryAccess(), ConnectionType.NEOFORGE);
         customData.accept(tempBuf);
         DataUIHolder holder = UI_HOLDERS.get(id).apply(player, tempBuf);
         tempBuf.release();
-        if (holder == null) return false;
+        if (holder == null) {
+            EntropyLib.LOGGER.error("UI holder {} is null!", id);
+            return false;
+        }
         player.openMenu(holder, buf -> {
             buf.writeResourceLocation(id);
             customData.accept(buf);
